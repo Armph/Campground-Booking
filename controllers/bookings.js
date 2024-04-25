@@ -71,6 +71,16 @@ const addBooking = async (req, res, next) => {
     }
 
     try {
+        if (req.body.numberOfNights > 3) {
+            return res.status(400).json({ success: false, message: "Number of nights can't exceed 3"});
+        }
+        if (req.body.numberOfNights < 1) {
+            return res.status(400).json({ success: false, message: "Number of nights can't be less than 1"});
+        }
+        if (req.body.bookingDate < Date.now()) {
+            return res.status(400).json({ success: false, message: "Booking date can't be in the past"});
+        }
+
         const booking = await Booking.create(req.body);
         res.status(201).json({ success: true, data: booking });
     } catch (err) {
