@@ -103,6 +103,16 @@ const updateBooking = async (req, res, next) => {
         return res.status(401).json({ success: false, message: `User ${req.user.id} is not authorized to update booking ${booking._id}`});
     }
 
+    if (req.body.numberOfNights > 3) {
+        return res.status(400).json({ success: false, message: "Number of nights can't exceed 3"});
+    }
+    if (req.body.numberOfNights < 1) {
+        return res.status(400).json({ success: false, message: "Number of nights can't be less than 1"});
+    }
+    if (req.body.bookingDate < Date.now()) {
+        return res.status(400).json({ success: false, message: "Booking date can't be in the past"});
+    }
+
     booking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true

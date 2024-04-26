@@ -1,33 +1,101 @@
 @startuml
-left to right direction
-package "VacQ"{
-    class "<<Application>>\nVacQService" as VacQService{}
+top to bottom direction
+package "Campground Booking" {
+    class "<<Application>>\nCampgroundBookingService" as CampgroundBookingService{}
 
-    class "<<Resource>>\nHospitals" as ResourceHospitals{
-        <<GET>> +getHospitals():Hospital
-        <<POST>> +createHospital():Hospital
+    class "<<Resource>>\nCampgrounds" as ResourceCampgrounds{
+        <<GET>> +getCampgrounds():Campground
+        <<POST>> +createCampground():Campground
     }
 
-    class "<<Resource>>\nHospital" as ResourceHospital {
-        <<GET>> +getHospital(): Hospital
-        <<PUT>> +updateHospital(): Hospital
-        <<DELETE>> +deleteHospital(): void
+    class "<<Resource>>\nCampground" as ResourceCampground {
+        <<GET>> +getCampground(): Campground
+        <<PUT>> +updateCampground(): Campground
+        <<DELETE>> +deleteCampground(): void
     }
 
-    class "<<Representation>>\nHospital" as RepresentationHospital {
+    class "<<Representation>>\nCampground" as RepresentationCampground {
         -name
         -address
-        -district
-        -province
-        -postalcode
-        -telephone
-        -region
+        -tel
+    }
+
+    class "<<Resource>>\nBookings" as ResourceBookings{
+        <<GET>> +getBookings():Booking
+        <<POST>> +addBooking():Booking
+    }
+
+    class "<<Resource>>\nBooking" as ResourceBooking {
+        <<GET>> +getBooking(): Booking
+        <<PUT>> +updateBooking(): Booking
+        <<DELETE>> +deleteBooking(): void
+    }
+
+    class "<<Representation>>\nBooking" as RepresentationBooking {
+        -bookingDate
+        -numberOfNights
+        -user
+        -campground
+    }
+
+    class "<<Resource>>\nAuth" as ResourceAuth {}
+
+    class "<<Resource>>\nRegister" as ResourceRegister {
+        <<POST>> +register(): User
+    }
+
+    class "<<Resource>>\nLogin" as ResourceLogin {
+        <<POST>> +login(): User
+    }
+
+    class "<<Resource>>\nMe" as ResourceMe {
+        <<GET>> +me(): User
+    }
+
+    class "<<Resource>>\nLogout" as ResourceLogout {
+        <<GET>> +logout(): void
+    }
+
+    class "<<Resource>>\nReset-Password" as ResourceResetPassword {
+        <<POST>> +resetPassword(): void
+    }
+
+    class "<<Resource>>\nVerify" as ResourceVerify {
+        <<POST>> +resetPasswordVerify(): void
+    }
+
+    class "<<Representation>>\nUser" as RepresentationUser {
+        -name
+        -tel
+        -email
+        -password
+        -role
+        -otp 
+        -otpExpires 
+        -createAt
     }
 
 }
 
-VacQService ..> ResourceHospitals:"/hospitals\n<<Path>>"
-ResourceHospitals ..> ResourceHospital: "/{hospitalId}\n<<Path>>"
-ResourceHospital ..> RepresentationHospital: "<<use>>"
+CampgroundBookingService ..> ResourceCampgrounds:"/campgrounds\n<<Path>>"
+ResourceCampgrounds ..> ResourceCampground: "/{campgroundId}\n<<Path>>"
+ResourceCampground ..> RepresentationCampground: "<<use>>"
+
+CampgroundBookingService ..> ResourceBookings:"/bookings\n<<Path>>"
+ResourceBookings ..> ResourceBooking: "/{bookingId}\n<<Path>>"
+ResourceBooking ..> RepresentationBooking: "<<use>>"
+
+CampgroundBookingService ..> ResourceAuth:"/auth\n<<Path>>"
+ResourceAuth ..> ResourceRegister: "/register\n<<Path>>"
+ResourceAuth ..> ResourceLogin: "/login\n<<Path>>"
+ResourceAuth ..> ResourceMe: "/me\n<<Path>>"
+ResourceAuth ..> ResourceLogout: "/logout\n<<Path>>"
+ResourceAuth ..> ResourceResetPassword: "/reset-password\n<<Path>>"
+ResourceResetPassword ..> ResourceVerify: "/verify\n<<Path>>"
+ResourceRegister ..> RepresentationUser: "<<use>>"
+ResourceLogin ..> RepresentationUser: "<<use>>"
+ResourceMe ..> RepresentationUser: "<<use>>"
+ResourceLogout ..> RepresentationUser: "<<use>>"
+ResourceVerify ..> RepresentationUser: "<<use>>
 
 @enduml
