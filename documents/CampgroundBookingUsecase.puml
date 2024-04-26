@@ -1,0 +1,20 @@
+@startuml Campground Booking Use Case Diagram 
+left to right direction
+actor "User" as user
+rectangle "Campground Booking System" as CampgroundBookingSystem {
+    usecase "Register" as register
+    usecase "View\nCampground" as viewCampground
+    usecase "Manage\nBooking" as manageBooking
+    usecase "Manage\nCampground" as manageCampground
+}
+
+user -- register
+user -- viewCampground
+user -- manageBooking
+
+actor "Admin" as admin
+register -- admin
+manageCampground -- admin
+manageBooking -- admin
+
+@enduml
