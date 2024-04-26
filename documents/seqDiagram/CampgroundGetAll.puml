@@ -1,0 +1,22 @@
+@startuml Manage Campground (GET ALL)
+
+header Campground Booking Sqeunce Diagram
+title "Manage Campground (GET ALL)"
+
+participant "Client" as client
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:campgrounds" as routerCampgrounds
+participant "<<controllers>>\n:campgrounds" as controllersCampgrounds
+participant "<<model>>\n:Campgrounds" as modelCampground
+database "<<MongoDB>>\n:Campgrounds" as CampgroundsDatabase
+
+client->server ++:req.get('/campgrounds')
+server->routerCampgrounds ++:app.use('/campgrounds', campgrounds)
+routerCampgrounds -> controllersCampgrounds ++:getCampgrounds()
+controllersCampgrounds->modelCampground ++:find()
+modelCampground ->CampgroundsDatabase ++: CampgroundSchema
+CampgroundsDatabase --> modelCampground --: campgrounds
+controllersCampgrounds <-- modelCampground --: campgrounds
+controllersCampgrounds->client --:response
+
+@enduml
