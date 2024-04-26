@@ -1,24 +1,22 @@
-@startuml Manage Booking (POST)
+@startuml Manage Booking (GET)
 
 header Campground Booking Sqeunce Diagram
-title "Manage Booking (POST)"
+title "Manage Booking (GET)"
 
 participant "Client" as client
 participant "<<javaScript>>\n:server" as server
-participant "<<router>>\n:campgrounds" as routerCampgrounds
 participant "<<router>>\n:bookings" as routerBookings
 participant "<<middleware>>\n:auth" as middlewareAuth
 participant "<<controllers>>\n:bookings" as controllersBookings
 participant "<<model>>\n:Bookings" as BookingModel
 database "<<MongoDB>>\n:Bookings" as BookingsDatabase
 
-client->server ++:req.post('/campgrounds/:campgroundId/bookings')
-server->routerCampgrounds ++:app.use('/campgrounds', campgrounds)
-routerCampgrounds -> routerBookings ++:router.use('/:campgroundId/bookings', bookingsRouter)
+client->server ++:req.post('/bookings')
+server->routerBookings ++:app.use('/bookings', bookings)
 routerBookings -> middlewareAuth ++:protect()
 middlewareAuth --> routerBookings --:client data
-routerBookings -> controllersBookings ++:addBooking()
-controllersBookings -> BookingModel ++:create(req.body)
+routerBookings -> controllersBookings ++:getBookings()
+controllersBookings -> BookingModel ++:find()
 BookingModel -> BookingsDatabase ++:BookingSchema
 BookingsDatabase --> BookingModel --:booking
 BookingModel --> controllersBookings --:booking

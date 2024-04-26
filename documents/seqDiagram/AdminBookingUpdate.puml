@@ -1,0 +1,25 @@
+@startuml Manage Booking (PUT)
+
+header Campground Booking Sqeunce Diagram
+title "Manage Booking (PUT)"
+
+participant "Admin" as admin
+participant "<<javaScript>>\n:server" as server
+participant "<<router>>\n:bookings" as routerBookings
+participant "<<middleware>>\n:auth" as middlewareAuth
+participant "<<controllers>>\n:bookings" as controllersBookings
+participant "<<model>>\n:Bookings" as BookingModel
+database "<<MongoDB>>\n:Bookings" as BookingsDatabase
+
+admin->server ++:req.post('/bookings/:bookingId')
+server->routerBookings ++:app.use('/bookings', bookings)
+routerBookings -> middlewareAuth ++:protect()
+middlewareAuth --> routerBookings --:admin data
+routerBookings -> controllersBookings ++:updateBooking()
+controllersBookings -> BookingModel ++:findByIdAndUpdate(req.params.id, req.body)
+BookingModel -> BookingsDatabase ++:BookingSchema
+BookingsDatabase --> BookingModel --:booking
+BookingModel --> controllersBookings --:booking
+controllersBookings -> admin --:response
+
+@enduml

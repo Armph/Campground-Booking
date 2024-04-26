@@ -17,6 +17,6 @@ controllersAuth ->modelUser ++:create(req.body)
 modelUser -> UsersDatabase ++:UsersSchema
 UsersDatabase --> modelUser --:user
 modelUser --> controllersAuth --:user
-controllersAuth --> client --:response
+controllersAuth -> client --:response
 
 @enduml

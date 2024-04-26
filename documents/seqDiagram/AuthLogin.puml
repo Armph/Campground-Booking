@@ -13,10 +13,10 @@ database "<<MongoDB>>\n:Users" as UsersDatabase
 client->server ++:req.post('/auth/login')
 server->routerAuth ++:app.use('/auth', auth)
 routerAuth ->controllersAuth ++:login()
-controllersAuth ->modelUser ++:Users.findOne(req.email) & User.match(req.password)
+controllersAuth ->modelUser ++:findOne(req.email), match(req.password)
 modelUser -> UsersDatabase ++:UsersSchema
 UsersDatabase --> modelUser --:user
 modelUser --> controllersAuth --:user
-controllersAuth --> client --:response
+controllersAuth -> client --:response
 
 @enduml
